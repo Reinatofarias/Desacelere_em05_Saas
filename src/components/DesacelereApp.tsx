@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Timer from './Timer';
 import WeeklyView from './WeeklyView';
@@ -8,6 +7,7 @@ import { toast } from '@/hooks/use-toast';
 interface SessionData {
   date: string;
   sessions: number;
+  sessionTimes: string[]; // Array de horários
 }
 
 const DesacelereApp = () => {
@@ -33,7 +33,8 @@ const DesacelereApp = () => {
         day,
         date: date.getDate().toString(),
         sessions: sessionData?.sessions || 0,
-        completed: (sessionData?.sessions || 0) > 0
+        completed: (sessionData?.sessions || 0) > 0,
+        sessionTimes: sessionData?.sessionTimes || []
       };
     });
   };
@@ -44,7 +45,13 @@ const DesacelereApp = () => {
   useEffect(() => {
     const savedSessions = localStorage.getItem('desacelene-sessions');
     if (savedSessions) {
-      setSessions(JSON.parse(savedSessions));
+      const parsedSessions = JSON.parse(savedSessions);
+      // Migrar dados antigos se necessário
+      const migratedSessions = parsedSessions.map((session: any) => ({
+        ...session,
+        sessionTimes: session.sessionTimes || []
+      }));
+      setSessions(migratedSessions);
     }
 
     const today = new Date().toISOString().split('T')[0];
@@ -59,6 +66,10 @@ const DesacelereApp = () => {
 
   const handleTimerComplete = () => {
     const today = new Date().toISOString().split('T')[0];
+    const currentTime = new Date().toLocaleTimeString('pt-BR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
     
     setSessions(prev => {
       const existingIndex = prev.findIndex(s => s.date === today);
@@ -66,9 +77,14 @@ const DesacelereApp = () => {
       if (existingIndex >= 0) {
         const updated = [...prev];
         updated[existingIndex].sessions += 1;
+        updated[existingIndex].sessionTimes.push(currentTime);
         return updated;
       } else {
-        return [...prev, { date: today, sessions: 1 }];
+        return [...prev, { 
+          date: today, 
+          sessions: 1, 
+          sessionTimes: [currentTime] 
+        }];
       }
     });
 
@@ -76,7 +92,7 @@ const DesacelereApp = () => {
 
     toast({
       title: "Parabéns! 🌸",
-      description: "Você completou mais uma sessão de descanso!",
+      description: `Você completou mais uma sessão de descanso às ${currentTime}!`,
       duration: 3000,
     });
   };

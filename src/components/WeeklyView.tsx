@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Card } from '@/components/ui/card';
-import { Calendar } from 'lucide-react';
+import { Calendar, Clock } from 'lucide-react';
 
 interface WeeklySession {
   day: string;
   date: string;
   sessions: number;
   completed: boolean;
+  sessionTimes?: string[]; // Horários das sessões
 }
 
 interface WeeklyViewProps {
@@ -38,8 +39,10 @@ const WeeklyView = ({ sessions }: WeeklyViewProps) => {
             }`}
           >
             <div className="text-xs font-semibold mb-1">{session.day}</div>
-            <div className="text-lg font-bold mb-1">{session.date}</div>
-            <div className="flex justify-center items-center">
+            <div className="text-lg font-bold mb-2">{session.date}</div>
+            
+            {/* Indicadores visuais das sessões */}
+            <div className="flex justify-center items-center mb-2">
               {session.sessions > 0 ? (
                 <div className="flex gap-1">
                   {Array.from({ length: Math.min(session.sessions, 5) }).map((_, i) => (
@@ -62,12 +65,39 @@ const WeeklyView = ({ sessions }: WeeklyViewProps) => {
                 <div className="w-2 h-2 rounded-full bg-gray-200" />
               )}
             </div>
+
+            {/* Lista de horários das sessões */}
+            {session.sessionTimes && session.sessionTimes.length > 0 && (
+              <div className="space-y-1">
+                {session.sessionTimes.slice(0, 3).map((time, timeIndex) => (
+                  <div
+                    key={timeIndex}
+                    className={`flex items-center justify-center gap-1 text-xs ${
+                      index === dayIndex
+                        ? 'text-white/90'
+                        : 'text-pink-600'
+                    }`}
+                  >
+                    <Clock className="w-2.5 h-2.5" />
+                    <span>{time}</span>
+                  </div>
+                ))}
+                {session.sessionTimes.length > 3 && (
+                  <div className={`text-xs ${
+                    index === dayIndex ? 'text-white/70' : 'text-pink-500'
+                  }`}>
+                    +{session.sessionTimes.length - 3} mais
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>
 
       <div className="mt-4 text-center text-sm text-pink-600">
         <p>Cada ponto representa uma sessão de 5 minutos 💖</p>
+        <p className="text-xs mt-1">Os horários mostram quando você fez suas pausas</p>
       </div>
     </Card>
   );
