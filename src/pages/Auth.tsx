@@ -52,21 +52,21 @@ const Auth = () => {
             <Clock className="w-8 h-8 text-pink-500" />
           </div>
           <h1 className="text-3xl font-bold text-rose-800">Desacelere</h1>
-          <p className="text-pink-600">Sua jornada de bem-estar começa aqui</p>
+          <p className="text-pink-600">Slow down — Your wellness journey starts here</p>
         </div>
 
         <Card className="glass-effect border-2 border-pink-200 shadow-xl">
           <CardHeader>
-            <CardTitle className="text-center text-rose-800">Acesse sua conta</CardTitle>
+            <CardTitle className="text-center text-rose-800">Access your account</CardTitle>
             <CardDescription className="text-center text-pink-600">
-              Entre ou crie uma conta para começar suas sessões de descanso
+              Sign in or create an account to start your relaxation sessions
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="space-y-4">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Entrar</TabsTrigger>
-                <TabsTrigger value="signup">Cadastrar</TabsTrigger>
+                <TabsTrigger value="signin">Login</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
               
               <TabsContent value="signin">
@@ -100,7 +100,7 @@ const Auth = () => {
                     disabled={isLoading}
                     className="w-full bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white"
                   >
-                    {isLoading ? 'Entrando...' : 'Entrar'}
+                    {isLoading ? 'Signing in...' : 'Login'}
                   </Button>
                 </form>
               </TabsContent>
@@ -136,7 +136,7 @@ const Auth = () => {
                     disabled={isLoading}
                     className="w-full bg-gradient-to-r from-pink-400 to-rose-400 hover:from-pink-500 hover:to-rose-500 text-white"
                   >
-                    {isLoading ? 'Cadastrando...' : 'Cadastrar'}
+                    {isLoading ? 'Creating account...' : 'Sign Up'}
                   </Button>
                 </form>
               </TabsContent>
